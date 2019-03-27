@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>MonitorAndManagement</artifactId>
+        <groupId>com.cqx</groupId>
+        <version>1.0.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>MonitorAndManagement-Agent</artifactId>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.8</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>wagon-maven-plugin</artifactId>
+                <version>1.0</version>
+                <configuration>
+                    <!--执行wagon:upload-single即可以将需要上传的文件进行上传 -->
+                    <fromFile>target/MonitorAndManagement-Agent-1.0.0.jar</fromFile>
+                    <url>scp://zyh:zyh@10.1.8.202/home/zyh</url>
+                    <!--以下是将指定目录上产到指定目录用wagon:upload命令-->
+                    <!-- <fromDir>target/</fromDir>
+                    <url>scp://root:2013520@192.168.0.133</url>
+                    <toDir>/usr/local</toDir>-->
+                    <!-- 用wagon:sshexec执行以下命令 -->
+                    <commands>
+                        <!-- 杀死原来的进程 -->
+                        <!-- <command>pkill -f test.jar</command> -->
+                        <!-- 重新启动test.jar，程序的输出结果写到nohup.out文件中 -->
+                        <!-- <command>nohup java -jar /home/xxg/Desktop/test.jar</command> -->
+                        <command>sshpass ssh -o StrictHostKeychecking=no -l root 127.0.0.1 "mv /home/zyh/MonitorAndManagement-Agent-1.0.0.jar /root/agent/lib/MonitorAndManagement-Agent-1.0.0.jar"</command>
+                    </commands>
+                    <!-- 显示运行命令的输出结果 -->
+                    <displayCommandOutputs>true</displayCommandOutputs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
