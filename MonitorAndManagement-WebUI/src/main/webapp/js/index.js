@@ -8,20 +8,26 @@ $(function(){
 function start(id) {
     // 显示遮罩层
     loadModal("show");
-    $.getScript(rp+"/operate.jsp?action=start&id="+id,function(rs){});
+    $.getScript(rp+"/operate.jsp?action=start&id="+id,function(rs){
+        status(id);
+    });
 }
 
 function stop(id) {
     // 显示遮罩层
     loadModal("show");
-    $.getScript(rp+"/operate.jsp?action=stop&id="+id,function(rs){});
+    $.getScript(rp+"/operate.jsp?action=stop&id="+id,function(rs){
+        status(id);
+    });
 }
 
 function restart(id) {
     // 显示遮罩层
     loadModal("show");
     $('#zookeeper'+id+'status').html("正在重启……");
-    $.getScript(rp+"/operate.jsp?action=restart&id="+id,function(rs){});
+    $.getScript(rp+"/operate.jsp?action=restart&id="+id,function(rs){
+        status(id);
+    });
 }
 
 function status(id) {

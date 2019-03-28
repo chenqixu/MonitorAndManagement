@@ -97,7 +97,7 @@ public class ZookeeperUI {
             sbtd.append("$('#" + status_id + "').html(\"");
             switch (type) {
                 case "start":
-                    sbtd.append(flag == true ? "运行中" : "已停止");
+                    sbtd.append(flag == true ? "执行成功" : "执行失败");
                     if (flag) {
                         sbexec.append("$('#" + a_id + "start').removeAttr(\"onclick\");");
                         sbexec.append("$('#" + a_id + "start').parent().addClass(\"disabled\");");
@@ -106,7 +106,7 @@ public class ZookeeperUI {
                     }
                     break;
                 case "stop":
-                    sbtd.append(flag == true ? "已停止" : "运行中");
+                    sbtd.append(flag == true ? "执行成功" : "执行失败");
                     if (flag) {
                         sbexec.append("$('#" + a_id + "stop').removeAttr(\"onclick\");");
                         sbexec.append("$('#" + a_id + "stop').parent().addClass(\"disabled\");");
@@ -115,7 +115,7 @@ public class ZookeeperUI {
                     }
                     break;
                 case "restart":
-                    sbtd.append(flag == true ? "运行中" : "已停止");
+                    sbtd.append(flag == true ? "执行成功" : "执行失败");
                     if (flag) {
                         sbexec.append("$('#" + a_id + "start').removeAttr(\"onclick\");");
                         sbexec.append("$('#" + a_id + "start').parent().addClass(\"disabled\");");
