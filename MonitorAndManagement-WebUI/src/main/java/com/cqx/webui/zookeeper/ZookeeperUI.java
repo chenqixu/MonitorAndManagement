@@ -44,11 +44,20 @@ public class ZookeeperUI {
             sb.append("<button class=\"btn\">操作</button>");
             sb.append("<button data-toggle=\"dropdown\" class=\"btn dropdown-toggle\"><span class=\"caret\"></span></button>");
             sb.append("<ul class=\"dropdown-menu\">");
-            sb.append("<li><a id=\"" + id + "start\" href=\"#\" onclick=\"start('" + zookeeper_arr[i] + "');\">启动</a></li>");
-            sb.append("<li><a id=\"" + id + "stop\" href=\"#\" onclick=\"stop('" + zookeeper_arr[i] + "');\">停止</a></li>");
-            sb.append("<li><a id=\"" + id + "restart\" href=\"#\" onclick=\"restart('" + zookeeper_arr[i] + "');\">重启</a></li>");
+            sb.append(buildLi(zookeeper_arr[i], OperateStatus.OP_START));
+            sb.append(buildLi(zookeeper_arr[i], OperateStatus.OP_STOP));
+            sb.append(buildLi(zookeeper_arr[i], OperateStatus.OP_RESTART));
             sb.append("</ul></div></td></tr>");
         }
+        return sb.toString();
+    }
+
+    private String buildLi(String id, OperateStatus operateStatus) {
+        StringBuffer sb = new StringBuffer();
+        String name_id = name + id;
+        sb.append("<li><a id=\"" + name_id + operateStatus.getCode()
+                + "\" href=\"#\" onclick=\"" + operateStatus.getCode()
+                + "('" + id + "');\">" + operateStatus.getDesc() + "</a></li>");
         return sb.toString();
     }
 
@@ -61,22 +70,23 @@ public class ZookeeperUI {
          * 注意，这里如果用su -，日志就会写在/home/zookeeper/下
          * 如果用su，日志就会正常
          */
-        String[] cmd = {"su", "zookeeper", "-c", _path + "zkServer.sh status"};
-        switch (type) {
-            case "start":
-                cmd[3] = _path + "zkServer.sh start";
+        String[] cmd = {"su", "zookeeper", "-c", ""};
+        switch (OperateStatus.parser(type)) {
+            case OP_START:
+                cmd[3] = _path + buildCmd(Const.ZK_CMD, type);
                 break;
-            case "stop":
-                cmd[3] = _path + "zkServer.sh stop";
+            case OP_STOP:
+                cmd[3] = _path + buildCmd(Const.ZK_CMD, type);
                 break;
-            case "restart":
-                cmd[3] = _path + "zkServer.sh restart";
+            case OP_RESTART:
+                cmd[3] = _path + buildCmd(Const.ZK_CMD, type);
                 break;
-            case "status":
-                cmd[3] = _path + "zkServer.sh status";
+            case OP_STATUS:
+                cmd[3] = _path + buildCmd(Const.ZK_CMD, type);
                 break;
             default:
-                break;
+                logger.warn("no adaptation Operate！");
+                throw new RuntimeException("no adaptation Operate！please contact the administrator !");
         }
         logger.info("cmd：{}，cmd.len：{}", cmd, cmd.length);
         AgentResult agentResult200 = monitorAndManagementClient200.exec(cmd, _path);
@@ -88,58 +98,47 @@ public class ZookeeperUI {
         try {
             response.setContentType("text/html");
             response.setCharacterEncoding("GBK");
-            PrintWriter out = null;
-            out = response.getWriter();
+            PrintWriter out = response.getWriter();
             String status_id = name + id + "status";
-            String a_id = name + id;
-            StringBuffer sbexec = new StringBuffer("");
-            StringBuffer sbtd = new StringBuffer("");
+            StringBuffer sbexec = new StringBuffer();
+            StringBuffer sbtd = new StringBuffer();
             sbtd.append("$('#" + status_id + "').html(\"");
-            switch (type) {
-                case "start":
-                    sbtd.append(flag == true ? "执行成功" : "执行失败");
+            switch (OperateStatus.parser(type)) {
+                case OP_START:
+                    sbtd.append(getOperateStatus(flag));
                     if (flag) {
-                        sbexec.append("$('#" + a_id + "start').removeAttr(\"onclick\");");
-                        sbexec.append("$('#" + a_id + "start').parent().addClass(\"disabled\");");
-                        sbexec.append("$('#" + a_id + "stop').attr(\"onclick\", \"stop('" + id + "');\");");
-                        sbexec.append("$('#" + a_id + "stop').parent().removeClass(\"disabled\");");
+                        sbexec.append(changeBtnStatus(id, Const.START, Const.REMOVEATTR));
+                        sbexec.append(changeBtnStatus(id, Const.STOP, Const.ATTR));
                     }
                     break;
-                case "stop":
-                    sbtd.append(flag == true ? "执行成功" : "执行失败");
+                case OP_STOP:
+                    sbtd.append(getOperateStatus(flag));
                     if (flag) {
-                        sbexec.append("$('#" + a_id + "stop').removeAttr(\"onclick\");");
-                        sbexec.append("$('#" + a_id + "stop').parent().addClass(\"disabled\");");
-                        sbexec.append("$('#" + a_id + "start').attr(\"onclick\", \"start('" + id + "');\");");
-                        sbexec.append("$('#" + a_id + "start').parent().removeClass(\"disabled\");");
+                        sbexec.append(changeBtnStatus(id, Const.START, Const.ATTR));
+                        sbexec.append(changeBtnStatus(id, Const.STOP, Const.REMOVEATTR));
                     }
                     break;
-                case "restart":
-                    sbtd.append(flag == true ? "执行成功" : "执行失败");
+                case OP_RESTART:
+                    sbtd.append(getOperateStatus(flag));
                     if (flag) {
-                        sbexec.append("$('#" + a_id + "start').removeAttr(\"onclick\");");
-                        sbexec.append("$('#" + a_id + "start').parent().addClass(\"disabled\");");
-                        sbexec.append("$('#" + a_id + "stop').attr(\"onclick\", \"stop('" + id + "');\");");
-                        sbexec.append("$('#" + a_id + "stop').parent().removeClass(\"disabled\");");
+                        sbexec.append(changeBtnStatus(id, Const.START, Const.REMOVEATTR));
+                        sbexec.append(changeBtnStatus(id, Const.STOP, Const.ATTR));
                     } else {
-                        sbexec.append("$('#" + a_id + "stop').removeAttr(\"onclick\");");
-                        sbexec.append("$('#" + a_id + "stop').parent().addClass(\"disabled\");");
-                        sbexec.append("$('#" + a_id + "start').attr(\"onclick\", \"start('" + id + "');\");");
-                        sbexec.append("$('#" + a_id + "start').parent().removeClass(\"disabled\");");
+                        sbexec.append(changeBtnStatus(id, Const.START, Const.ATTR));
+                        sbexec.append(changeBtnStatus(id, Const.STOP, Const.REMOVEATTR));
                     }
                     break;
-                case "status":
-                    sbtd.append(flag == true ? "运行中" : "已停止");
+                case OP_STATUS:
+                    sbtd.append(getOperateRunStatus(flag));
                     if (flag) {
-                        sbexec.append("$('#" + a_id + "start').removeAttr(\"onclick\");");
-                        sbexec.append("$('#" + a_id + "start').parent().addClass(\"disabled\");");
+                        sbexec.append(changeBtnStatus(id, Const.START, Const.REMOVEATTR));
                     } else {
-                        sbexec.append("$('#" + a_id + "stop').removeAttr(\"onclick\");");
-                        sbexec.append("$('#" + a_id + "stop').parent().addClass(\"disabled\");");
+                        sbexec.append(changeBtnStatus(id, Const.STOP, Const.REMOVEATTR));
                     }
                     break;
                 default:
-                    break;
+                    logger.warn("no adaptation Operate！");
+                    throw new RuntimeException("no adaptation Operate！please contact the administrator !");
             }
             sbtd.append("\");");
             sbexec.append("loadModal(\"hide\");");
@@ -148,7 +147,32 @@ public class ZookeeperUI {
             out.flush();
             out.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
+    }
+
+    private String changeBtnStatus(String id, String type, String operate) {
+        StringBuffer sb = new StringBuffer();
+        String name_id = name + id;
+        if (operate.equals("removeAttr")) {
+            sb.append("$('#" + name_id + type + "').removeAttr(\"onclick\");");
+            sb.append("$('#" + name_id + type + "').parent().addClass(\"disabled\");");
+        } else if (operate.equals("attr")) {
+            sb.append("$('#" + name_id + type + "').attr(\"onclick\", \"start('" + id + "');\");");
+            sb.append("$('#" + name_id + type + "').parent().removeClass(\"disabled\");");
+        }
+        return sb.toString();
+    }
+
+    private String getOperateStatus(boolean operate) {
+        return operate == true ? OperateStatus.SUCCESS.getDesc() : OperateStatus.FAIL.getDesc();
+    }
+
+    private String getOperateRunStatus(boolean operate) {
+        return operate == true ? OperateStatus.STATUS_RUN.getDesc() : OperateStatus.STATUS_STOP.getDesc();
+    }
+
+    private String buildCmd(String base_cmd, String operate) {
+        return base_cmd + Const.BLANK_SPACEK + operate;
     }
 }
