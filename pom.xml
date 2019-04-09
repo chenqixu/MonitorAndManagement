@@ -8,6 +8,7 @@
         <module>MonitorAndManagement-Agent</module>
         <module>MonitorAndManagement-Server</module>
         <module>MonitorAndManagement-WebUI</module>
+        <module>ROOT</module>
     </modules>
     <packaging>pom</packaging>
     <build>
