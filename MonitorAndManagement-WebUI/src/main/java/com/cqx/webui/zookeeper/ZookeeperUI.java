@@ -61,6 +61,9 @@ public class ZookeeperUI {
         return sb.toString();
     }
 
+    // todo 操作失败的时候界面把错误日志打出来
+    // todo 查看最近操作日志
+    // todo 界面点击进去，查看每个集群每台集群状态
     public void operate(String type, String id, HttpServletResponse response) {
         logger.info("type：{}，id：{}", type, id);
         String path = "/home/zookeeper/port/zookeeper-3.4.6/bin/";

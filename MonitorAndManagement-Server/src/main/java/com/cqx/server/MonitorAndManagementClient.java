@@ -1,6 +1,7 @@
 package com.cqx.server;
 
 import com.cqx.agent.bean.AgentResult;
+import com.cqx.jmx.util.IJMXClient;
 import com.cqx.jmx.util.JMXClientFactory;
 
 /**
@@ -36,7 +37,7 @@ public class MonitorAndManagementClient {
 
     public AgentResult exec(String cmd) {
         check();
-        JMXClientFactory.JMXClientUtil jmxClientUtil = JMXClientFactory.startJMXClient(beanname, ip, port);
+        IJMXClient jmxClientUtil = JMXClientFactory.startJMXClient(beanname, ip, port);
         String resultCode = jmxClientUtil.invoke("exec", new Object[]{cmd}, new String[]{"java.lang.String"});
         String successLog = jmxClientUtil.getAttributeByName("SuccessLog");
         String errLog = jmxClientUtil.getAttributeByName("ErrLog");
@@ -45,7 +46,7 @@ public class MonitorAndManagementClient {
 
     public AgentResult execs(String cmd) {
         check();
-        JMXClientFactory.JMXClientUtil jmxClientUtil = JMXClientFactory.startJMXClient(beanname, ip, port);
+        IJMXClient jmxClientUtil = JMXClientFactory.startJMXClient(beanname, ip, port);
         String resultCode = jmxClientUtil.invoke("execs", new Object[]{cmd}, new String[]{"java.lang.String"});
         String successLog = jmxClientUtil.getAttributeByName("SuccessLog");
         String errLog = jmxClientUtil.getAttributeByName("ErrLog");
@@ -54,7 +55,7 @@ public class MonitorAndManagementClient {
 
     public AgentResult exec(String[] cmd, String path) {
         check();
-        JMXClientFactory.JMXClientUtil jmxClientUtil = JMXClientFactory.startJMXClient(beanname, ip, port);
+        IJMXClient jmxClientUtil = JMXClientFactory.startJMXClient(beanname, ip, port);
         AgentResult agentResult = jmxClientUtil.invoke("exec", new Object[]{cmd, path}, new String[]{String[].class.getName(), "java.lang.String"});
         return agentResult;
     }
@@ -79,7 +80,6 @@ public class MonitorAndManagementClient {
         public MonitorAndManagementClientParam setIp(String ip) {
             monitorAndManagementClient.setIp(ip);
             return this;
-
         }
     }
 }
