@@ -35,15 +35,9 @@ ZookeeperUI zkui = new ZookeeperUI();
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>
-                                状态
-                            </th>
-                            <th>
-                                名称
-                            </th>
-                            <th>
-                                操作
-                            </th>
+                            <th>状态</th>
+                            <th>名称</th>
+                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>

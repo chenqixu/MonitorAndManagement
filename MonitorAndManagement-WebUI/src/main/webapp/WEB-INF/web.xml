@@ -6,6 +6,6 @@
 
   <display-name>MonitorAndManagement-WebUI</display-name>
   <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>build.jsp</welcome-file>
   </welcome-file-list>
 </web-app>

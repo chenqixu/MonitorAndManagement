@@ -14,6 +14,7 @@ public class MonitorAndManagementClientTest {
     private MonitorAndManagementClient monitorAndManagementClient200;
     private MonitorAndManagementClient monitorAndManagementClient201;
     private MonitorAndManagementClient monitorAndManagementClient202;
+    private MonitorAndManagementClient monitorAndManagementClientWin199;
 
     @Before
     public void setUp() {
@@ -23,6 +24,18 @@ public class MonitorAndManagementClientTest {
                 .newbuilder().setIp("10.1.8.201").setPort(10999).build();
         monitorAndManagementClient202 = MonitorAndManagementClient
                 .newbuilder().setIp("10.1.8.202").setPort(10999).build();
+        monitorAndManagementClientWin199 = MonitorAndManagementClient
+                .newbuilder().setIp("10.1.2.199").setPort(10999).build();
+    }
+
+    @Test
+    public void win199() {
+//        String[] cmd = {"cmd", "/d", "dir"};
+        String[] cmd = {"D:\\cqx\\agent\\test.bat"};
+        AgentResult agentResult = monitorAndManagementClientWin199.exec(cmd, "C:\\");
+        logger.info("resultCode：{}", agentResult.getResultCode());
+        logger.info("successLog：{}", agentResult.getSuccessLog());
+        logger.info("errLog：{}", agentResult.getErrLog());
     }
 
     @Test
