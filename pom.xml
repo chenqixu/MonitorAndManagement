@@ -9,6 +9,8 @@
         <module>MonitorAndManagement-Server</module>
         <module>MonitorAndManagement-WebUI</module>
         <module>ROOT</module>
+        <module>MonitorAndManagement-SpringBootServer</module>
+        <module>MonitorAndManagement-Model</module>
     </modules>
     <packaging>pom</packaging>
     <build>

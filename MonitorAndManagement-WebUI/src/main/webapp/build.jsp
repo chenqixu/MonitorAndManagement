@@ -31,7 +31,7 @@
         </div>
     </div>
 </div>
-<script src="<%=path%>/js/jquery.min.js"></script>
+<script src="<%=path%>/js/jquery-2.1.4.min.js"></script>
 <script src="<%=path%>/js/bootstrap.min.js"></script>
 <script src="<%=path%>/js/build.js"></script>
 </body>

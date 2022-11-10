@@ -1,41 +1,20 @@
 // 初始化
-$(function(){
-    // 进度条遮罩层初始化
-    $("#loadingModal").modal({backdrop:'static', keyboard:false});
-    loadModal("hide");
+$(function () {
+
 });
 
-function start(id) {
-    // 显示遮罩层
-    loadModal("show");
-    $.getScript(rp+"/operate.jsp?action=start&id="+id,function(rs){
-        status(id);
-    });
+var active_parent = $("li.active");
+
+function change_type(_parent) {
+    active_parent.removeClass("active");
+    active_parent = _parent.parent();
+    active_parent.addClass('active');
 }
 
-function stop(id) {
-    // 显示遮罩层
-    loadModal("show");
-    $.getScript(rp+"/operate.jsp?action=stop&id="+id,function(rs){
-        status(id);
-    });
-}
-
-function restart(id) {
-    // 显示遮罩层
-    loadModal("show");
-    $('#zookeeper'+id+'status').html("正在重启……");
-    $.getScript(rp+"/operate.jsp?action=restart&id="+id,function(rs){
-        status(id);
-    });
-}
-
-function status(id) {
-    $.getScript(rp+"/operate.jsp?action=status&id="+id,function(rs){});
-}
-
-/***********进度条遮罩层*************/
-// 显示或隐藏 flag:show,hide
-function loadModal(flag) {
-	$("#loadingModal").modal(flag);
+function loadingModal(modal) {
+    if (modal == "show") {
+        $('#loadingModal').modal('show');
+    } else {
+        $('#loadingModal').modal('hide');
+    }
 }

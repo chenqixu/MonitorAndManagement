@@ -1,11 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://java.sun.com/xml/ns/javaee"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaeehttp://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-         id="WebApp_ID" version="3.0">
+<web-app
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        id="WebApp_ID" version="3.0">
 
-  <display-name>MonitorAndManagement-WebUI</display-name>
-  <welcome-file-list>
-    <welcome-file>build.jsp</welcome-file>
-  </welcome-file-list>
+    <display-name>MonitorAndManagement-WebUI</display-name>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <servlet>
+        <servlet-name>CreateServlet</servlet-name>
+        <servlet-class>com.cqx.webui.toolui.servlet.CreateServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreateServlet</servlet-name>
+        <url-pattern>/servlet/create.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MyTaskServlet</servlet-name>
+        <servlet-class>com.cqx.webui.toolui.servlet.MyTaskServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MyTaskServlet</servlet-name>
+        <url-pattern>/servlet/mytask.do</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ResourceServlet</servlet-name>
+        <servlet-class>com.cqx.webui.toolui.servlet.ResourceServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ResourceServlet</servlet-name>
+        <url-pattern>/servlet/resource.do</url-pattern>
+    </servlet-mapping>
 </web-app>
